@@ -5,7 +5,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import BaseButton from "../components/BaseButton.vue";
 import BasePanel from "../components/BasePanel.vue";
-import ColorCard from "../components/ColorCard.vue";
+import ColorEditor from "../components/ColorEditor.vue";
 import ErrorMessage from "../components/ErrorMessage.vue";
 import LoadingState from "../components/LoadingState.vue";
 
@@ -44,38 +44,9 @@ function getInputValue(event: Event): string {
 
   return target.value;
 }
-
-function updateColorName(colorId: string, event: Event): void {
-  const value = getInputValue(event);
-
-  form.colors = form.colors.map((color) => {
-    if (color.id !== colorId) {
-      return color;
-    }
-
-    return {
-      ...color,
-      name: value,
-    };
-  });
+function handleColorUpdate(updatedColor: Color): void {
+  form.colors = form.colors.map((color) => (color.id === updatedColor.id ? updatedColor : color));
 }
-
-function updateColorHex(colorId: string, event: Event): void {
-  const value = getInputValue(event);
-  const normalizedHex = value.toUpperCase();
-
-  form.colors = form.colors.map((color) => {
-    if (color.id !== colorId) {
-      return color;
-    }
-
-    return {
-      ...color,
-      hex: normalizedHex,
-    };
-  });
-}
-
 onMounted(async () => {
   if (isNew) {
     form.colors = [
@@ -226,37 +197,13 @@ function goBack(): void {
 
       <BasePanel title="Цвета">
         <div class="editor-colors">
-          <div v-for="color in form.colors" :key="color.id" class="editor-color">
-            <div class="form-group">
-              <label> Название </label>
-
-              <input :value="color.name" type="text" @input="updateColorName(color.id, $event)" />
-            </div>
-
-            <div class="form-group">
-              <label> HEX </label>
-
-              <div class="hex-input-row">
-                <input
-                  :value="color.hex"
-                  type="text"
-                  maxlength="7"
-                  placeholder="#FF0000"
-                  @input="updateColorHex(color.id, $event)"
-                />
-
-                <input
-                  :value="isValidHex(color.hex) ? color.hex : '#000000'"
-                  type="color"
-                  @input="updateColorHex(color.id, $event)"
-                />
-              </div>
-            </div>
-
-            <ColorCard :color="color" />
-
-            <BaseButton variant="danger" @click="removeColor(color.id)"> Удалить цвет </BaseButton>
-          </div>
+          <ColorEditor
+            v-for="color in form.colors"
+            :key="color.id"
+            :color="color"
+            @update="handleColorUpdate"
+            @remove="removeColor"
+          />
         </div>
 
         <div class="editor-actions">
