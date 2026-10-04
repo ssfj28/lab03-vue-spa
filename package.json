@@ -12,13 +12,18 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
-    "vue": "^3.5.42"
+    "vue": "^3.5.42",
+    "vue-router": "^5.3.1"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.5",
     "@types/node": "^24.13.4",
     "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/eslint-config-typescript": "^14.9.0",
     "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.12.0",
+    "eslint-plugin-oxlint": "^1.86.0",
+    "eslint-plugin-vue": "^10.11.1",
     "json-server": "^0.17.4",
     "npm-run-all2": "^9.0.3",
     "typescript": "~6.0.0",
